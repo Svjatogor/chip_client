@@ -184,6 +184,7 @@ void forward_network(network net, network_state state)
         }
         l.forward(l, state);
         state.input = l.output;
+        free_layer(l);
     }
     printf("\n");
 }

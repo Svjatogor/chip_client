@@ -33,7 +33,7 @@ void free_layer(layer l)
     if(l.weights)            free(l.weights);
     if(l.weight_updates)     free(l.weight_updates);
     if(l.delta)              free(l.delta);
-    if(l.output)             free(l.output);
+    //if(l.output)             free(l.output);
     if(l.squared)            free(l.squared);
     if(l.norms)              free(l.norms);
     if(l.spatial_mean)       free(l.spatial_mean);
