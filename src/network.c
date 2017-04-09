@@ -178,6 +178,7 @@ void forward_network(network net, network_state state)
     for(i = 0; i < net.n; ++i){
         state.index = i;
         layer l = net.layers[i];
+        printf("\nlayer #%d", i);
         if(l.delta){
             fill_cpu(l.outputs * l.batch, 0, l.delta, 1);
         }
