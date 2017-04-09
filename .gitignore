@@ -18,6 +18,7 @@ cfg/
 /cmake-build-debug
 /cmake-build-release
 .idea/
+weights/
 darknet
 .fuse*
 

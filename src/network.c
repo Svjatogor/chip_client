@@ -185,6 +185,7 @@ void forward_network(network net, network_state state)
         l.forward(l, state);
         state.input = l.output;
     }
+    printf("\n");
 }
 
 void update_network(network net)
