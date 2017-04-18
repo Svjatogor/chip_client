@@ -2,6 +2,7 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include "tcp_client.h"
 
 namespace Ui {
 class MainWindow;
@@ -15,8 +16,12 @@ public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
 
+public slots:
+    void connectToChip();
+
 private:
     Ui::MainWindow *ui;
+
 };
 
 #endif // MAINWINDOW_H
