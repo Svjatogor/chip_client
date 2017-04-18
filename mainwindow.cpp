@@ -1,5 +1,7 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
+#include <QMessageBox>
+
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -14,5 +16,11 @@ MainWindow::~MainWindow()
 }
 
 void MainWindow::connectToChip() {
-    return;
+    _socketId = connectToServer();
+    if (_socketId != -1) {
+        ui->stackedWidget->setCurrentIndex(1);
+    }
+    else {
+        QMessageBox::warning(this, "Error connection",  "Error connect to server");
+    }
 }

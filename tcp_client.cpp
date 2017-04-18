@@ -1,16 +1,24 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>
+#include <string.h>
+#include <sys/types.h>
+#include <sys/socket.h>
+#include <netinet/in.h>
+#include <netdb.h>
 #include "tcp_client.h"
-
-int connectToServet(char* host_name) {
+int connectToServet() {
     int sockfd, portno, n;
     struct sockaddr_in serv_addr;
     struct hostent *server;
 
     char buffer[256];
-    portno = atoi("80");
+    portno = atoi("222");
     sockfd = socket(AF_INET, SOCK_STREAM, 0);
-    if (sockfd < 0)
+    if (sockfd < 0) {
         return -1;
-    server = gethostbyname(host_name);
+    }
+    server = gethostbyname("192.168.0.5");
     if (server == NULL) {
         fprintf(stderr,"ERROR, no such host\n");
         exit(0);

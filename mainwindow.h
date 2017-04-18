@@ -3,7 +3,6 @@
 
 #include <QMainWindow>
 #include "tcp_client.h"
-
 namespace Ui {
 class MainWindow;
 }
@@ -21,7 +20,7 @@ public slots:
 
 private:
     Ui::MainWindow *ui;
-
+    int _socketId;
 };
 
 #endif // MAINWINDOW_H
