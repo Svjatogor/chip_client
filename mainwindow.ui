@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>577</width>
-    <height>415</height>
+    <width>645</width>
+    <height>427</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -15,65 +15,61 @@
   </property>
   <widget class="QWidget" name="centralWidget">
    <layout class="QGridLayout" name="gridLayout">
-    <item row="1" column="0">
-     <widget class="QStackedWidget" name="stackedWidget">
-      <property name="currentIndex">
-       <number>0</number>
-      </property>
-      <widget class="QWidget" name="page">
-       <layout class="QGridLayout" name="gridLayout_3">
-        <item row="0" column="0">
-         <widget class="QPushButton" name="connectButton">
-          <property name="text">
-           <string>Connect</string>
-          </property>
-         </widget>
-        </item>
-       </layout>
-      </widget>
-      <widget class="QWidget" name="page_2">
-       <layout class="QGridLayout" name="gridLayout_2">
-        <item row="0" column="0">
-         <layout class="QHBoxLayout" name="horizontalLayout">
-          <item>
-           <widget class="QPushButton" name="selectImgButton">
+    <item row="0" column="0">
+     <layout class="QHBoxLayout" name="horizontalLayout_2">
+      <item>
+       <widget class="QStackedWidget" name="stackedWidget">
+        <property name="currentIndex">
+         <number>0</number>
+        </property>
+        <widget class="QWidget" name="page">
+         <layout class="QGridLayout" name="gridLayout_3">
+          <item row="0" column="0">
+           <widget class="QPushButton" name="connectButton">
             <property name="text">
-             <string>Select image...</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QPushButton" name="runButton">
-            <property name="text">
-             <string>Run</string>
+             <string>Connect</string>
             </property>
            </widget>
           </item>
          </layout>
-        </item>
-       </layout>
-      </widget>
-     </widget>
+        </widget>
+        <widget class="QWidget" name="page_2">
+         <layout class="QGridLayout" name="gridLayout_2">
+          <item row="0" column="0">
+           <layout class="QHBoxLayout" name="horizontalLayout">
+            <item>
+             <widget class="QPushButton" name="selectImgButton">
+              <property name="text">
+               <string>Select image...</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QPushButton" name="runButton">
+              <property name="text">
+               <string>Run</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+         </layout>
+        </widget>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPlainTextEdit" name="logsText">
+        <property name="maximumSize">
+         <size>
+          <width>256</width>
+          <height>16777215</height>
+         </size>
+        </property>
+       </widget>
+      </item>
+     </layout>
     </item>
    </layout>
-  </widget>
-  <widget class="QMenuBar" name="menuBar">
-   <property name="geometry">
-    <rect>
-     <x>0</x>
-     <y>0</y>
-     <width>577</width>
-     <height>19</height>
-    </rect>
-   </property>
-  </widget>
-  <widget class="QToolBar" name="mainToolBar">
-   <attribute name="toolBarArea">
-    <enum>TopToolBarArea</enum>
-   </attribute>
-   <attribute name="toolBarBreak">
-    <bool>false</bool>
-   </attribute>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
  </widget>

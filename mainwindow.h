@@ -2,6 +2,7 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include <QFileDialog>
 #include "tcp_client.h"
 namespace Ui {
 class MainWindow;
@@ -17,6 +18,7 @@ public:
 
 public slots:
     void connectToChip();
+    void sendPicture();
 
 private:
     Ui::MainWindow *ui;

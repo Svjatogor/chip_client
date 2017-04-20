@@ -7,7 +7,7 @@
 #include <netinet/in.h>
 #include <netdb.h>
 #include "tcp_client.h"
-int connectToServet() {
+int connectToServer() {
     int sockfd, portno, n;
     struct sockaddr_in serv_addr;
     struct hostent *server;
@@ -18,7 +18,7 @@ int connectToServet() {
     if (sockfd < 0) {
         return -1;
     }
-    server = gethostbyname("192.168.0.5");
+    server = gethostbyname("192.168.0.11");
     if (server == NULL) {
         fprintf(stderr,"ERROR, no such host\n");
         exit(0);
@@ -52,5 +52,33 @@ int writeMessage(int sock_id, char* buffer) {
     if (n < 0) {
         return -1;
     }
+    return n;
+}
+
+int sendImage(int sock_id, char *file_name) {
+    FILE *picture;
+    picture = fopen(file_name, "r");
+    int size;
+    fseek(picture, 0, SEEK_END);
+    size = ftell(picture);
+    fseek(picture, 0, SEEK_SET);
+
+    // send picture size
+    int n = write(sock_id, &size, sizeof(size));
+    if (n < 0) {
+        return -1;
+    }
+
+    // send picture as byte array
+    char send_buffer[size];
+    while(!feof(picture)) {
+        fread(send_buffer, 1, sizeof(send_buffer), picture);
+        n = write(sock_id, send_buffer, sizeof(send_buffer));
+        if (n < 0) {
+            return -1;
+        }
+        bzero(send_buffer, sizeof(send_buffer));
+    }
+
     return n;
 }
