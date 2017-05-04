@@ -18,7 +18,8 @@ int connectToServer() {
     if (sockfd < 0) {
         return -1;
     }
-    server = gethostbyname("192.168.0.11");
+    //server = gethostbyname("10.42.0.97");
+    server = gethostbyname("localhost");
     if (server == NULL) {
         fprintf(stderr,"ERROR, no such host\n");
         exit(0);
@@ -81,4 +82,31 @@ int sendImage(int sock_id, char *file_name) {
     }
 
     return n;
+}
+
+void get_image(int sock_id, char* file_name) {
+    bzero(file_name, sizeof(file_name));
+    strcpy(file_name, "predictions.png");
+    int size;
+    int n = read(sock_id, &size, sizeof(int));
+    if (n < 0) {
+        return;
+    }
+    printf("Size image: %d\nReading image...\n", size);
+    char image_bytes[size];
+    n = 0;
+    while (size > 0) {
+        n = read(sock_id, image_bytes + n, size);
+        if (n < 0) {
+            return;
+        }
+        size -= n;
+    }
+    printf("n = %d\n", n);
+    printf("Image received\n");
+    // convert bytes to file
+    FILE *image;
+    image = fopen(file_name, "w");
+    fwrite(image_bytes, 1, sizeof(image_bytes), image);
+    fclose(image);
 }
