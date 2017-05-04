@@ -641,6 +641,7 @@ void test_detector(char *datacfg, char *cfgfile, char *weightfile, char *filenam
         network_predict(net, X);
 
         sprintf(time_info, "%s: Predicted in %f seconds.\n", input, sec(clock()-time));
+        send_message(time_info);
         printf(time_info);
 
         get_region_boxes(l, im.w, im.h, net.w, net.h, thresh, probs, boxes, 0, 0, hier_thresh, 1);
@@ -648,7 +649,7 @@ void test_detector(char *datacfg, char *cfgfile, char *weightfile, char *filenam
         //else if (nms) do_nms_sort(boxes, probs, l.w*l.h*l.n, l.classes, nms);
         draw_detections(im, l.w*l.h*l.n, thresh, boxes, probs, names, alphabet, l.classes);
         save_image(im, "predictions");
-
+        send_image("predictions.png");
 
         free_image(im);
         free_image(sized);

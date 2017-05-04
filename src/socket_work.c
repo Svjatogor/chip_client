@@ -31,7 +31,7 @@ void send_image(const char* file_name) {
     fseek(picture, 0, SEEK_END);
     size = ftell(picture);
     fseek(picture, 0, SEEK_SET);
-
+    printf("size image: %d", size);
     // send picture size
     int n = write(sock_id, &size, sizeof(size));
     if (n < 0) {
