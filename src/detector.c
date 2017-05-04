@@ -603,9 +603,9 @@ void test_detector(char *datacfg, char *cfgfile, char *weightfile, char *filenam
     image **alphabet = load_alphabet();
     network net = parse_network_cfg(cfgfile);
 
-    char message[256] = "parse end";
-    int size_message = sizeof(message);
-    int n = write(sock_id, message, size_message);
+//    char message[256] = "parse end";
+//    int size_message = sizeof(message);
+//    int n = write(sock_id, message, size_message);
 
     if(weightfile){
         load_weights(&net, weightfile);

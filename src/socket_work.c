@@ -24,7 +24,7 @@ void get_message(char* message) {
     }
 }
 
-void send_image(char* file_name) {
+void send_image(const char* file_name) {
     FILE *picture;
     picture = fopen(file_name, "r");
     int size;
@@ -50,7 +50,9 @@ void send_image(char* file_name) {
     }
 }
 
-void get_image() {
+void get_image(char *file_name) {
+    bzero(file_name, sizeof(file_name));
+    strcpy(file_name, "img_for_detect.png");
     int size;
     int n = read(sock_id, &size, sizeof(int));
     if (n < 0) {
@@ -65,7 +67,7 @@ void get_image() {
     printf("Image received\n");
     // convert bytes to file
     FILE *image;
-    image = fopen("img_for_detect.png", "w");
+    image = fopen(file_name, "w");
     fwrite(image_bytes, 1, sizeof(image_bytes), image);
 }
 

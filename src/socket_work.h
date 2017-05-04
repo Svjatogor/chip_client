@@ -7,7 +7,7 @@
 
 void send_message(const char* message);
 void get_message(char* message);
-void send_image(char* file_name);
-void get_image();
+void send_image(const char* file_name);
+void get_image(char *file_name);
 void close_sock();
 #endif //DARKNET_SOCKET_WORK_H
