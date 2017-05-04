@@ -38,13 +38,13 @@ void average(int argc, char *argv[])
     network net = parse_network_cfg(cfgfile);
     network sum = parse_network_cfg(cfgfile);
 
-    char *weightfile = argv[4];   
+    char *weightfile = argv[4];
     load_weights(&sum, weightfile);
 
     int i, j;
     int n = argc - 5;
     for(i = 0; i < n; ++i){
-        weightfile = argv[i+5];   
+        weightfile = argv[i+5];
         load_weights(&net, weightfile);
         for(j = 0; j < net.n; ++j){
             layer l = net.layers[j];
@@ -72,11 +72,11 @@ void average(int argc, char *argv[])
             int num = l.n*l.c*l.size*l.size;
             scal_cpu(l.n, 1./n, l.biases, 1);
             scal_cpu(num, 1./n, l.weights, 1);
-                if(l.batch_normalize){
-                    scal_cpu(l.n, 1./n, l.scales, 1);
-                    scal_cpu(l.n, 1./n, l.rolling_mean, 1);
-                    scal_cpu(l.n, 1./n, l.rolling_variance, 1);
-                }
+            if(l.batch_normalize){
+                scal_cpu(l.n, 1./n, l.scales, 1);
+                scal_cpu(l.n, 1./n, l.rolling_mean, 1);
+                scal_cpu(l.n, 1./n, l.rolling_variance, 1);
+            }
         }
         if(l.type == CONNECTED){
             scal_cpu(l.outputs, 1./n, l.biases, 1);
@@ -348,18 +348,6 @@ void denormalize_net(char *cfgfile, char *weightfile, char *outfile)
     save_weights(net, outfile);
 }
 
-void visualize(char *cfgfile, char *weightfile)
-{
-    network net = parse_network_cfg(cfgfile);
-    if(weightfile){
-        load_weights(&net, weightfile);
-    }
-    visualize_network(net);
-#ifdef OPENCV
-    cvWaitKey(0);
-#endif
-}
-
 int main(int argc, char **argv)
 {
     //test_resize("data/bad.jpg");
@@ -456,8 +444,6 @@ int main(int argc, char **argv)
         partial(argv[2], argv[3], argv[4], atoi(argv[5]));
     } else if (0 == strcmp(argv[1], "average")){
         average(argc, argv);
-    } else if (0 == strcmp(argv[1], "visualize")){
-        visualize(argv[2], (argc > 3) ? argv[3] : 0);
     } else if (0 == strcmp(argv[1], "imtest")){
         test_resize(argv[2]);
     } else {
@@ -465,4 +451,3 @@ int main(int argc, char **argv)
     }
     return 0;
 }
-

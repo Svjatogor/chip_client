@@ -635,10 +635,7 @@ void test_detector(char *datacfg, char *cfgfile, char *weightfile, char *filenam
         free_image(sized);
         free(boxes);
         free_ptrs((void **)probs, l.w*l.h*l.n);
-#ifdef OPENCV
-        cvWaitKey(0);
-        cvDestroyAllWindows();
-#endif
+
         if (filename) break;
     }
 }
