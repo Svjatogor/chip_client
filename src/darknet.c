@@ -1,6 +1,11 @@
 #include <time.h>
 #include <stdlib.h>
 #include <stdio.h>
+#include <string.h>
+#include <unistd.h>
+#include <sys/types.h>
+#include <sys/socket.h>
+#include <netinet/in.h>
 
 #include "parser.h"
 #include "utils.h"
@@ -29,6 +34,7 @@ extern void run_go(int argc, char **argv);
 extern void run_art(int argc, char **argv);
 extern void run_super(int argc, char **argv);
 extern void run_lsd(int argc, char **argv);
+extern int sock_id = -1;
 
 void average(int argc, char *argv[])
 {
@@ -383,27 +389,51 @@ void visualize(char *cfgfile, char *weightfile)
     visualize_network(net);
 }
 
+int waiting_clients(char* port) {
+    int sockfd, newsockfd, portno;
+    socklen_t client;
+    struct sockaddr_in serv_addr, cli_addr;
+    sockfd = socket(AF_INET, SOCK_STREAM, 0);
+    if (sockfd < 0)
+        error("ERROR opening socket");
+    bzero((char *) &serv_addr, sizeof(serv_addr));
+    portno = atoi(port);
+    serv_addr.sin_family = AF_INET;
+    serv_addr.sin_addr.s_addr = INADDR_ANY;
+    serv_addr.sin_port = htons(portno);
+    if (bind(sockfd, (struct sockaddr *) &serv_addr,
+             sizeof(serv_addr)) < 0)
+        error("ERROR on binding");
+    listen(sockfd,5);
+    client = sizeof(cli_addr);
+    newsockfd = accept(sockfd,
+                       (struct sockaddr *) &cli_addr,
+                       &client);
+    if (newsockfd < 0)
+        error("ERROR on accept");
+
+    return newsockfd;
+}
+
 int main(int argc, char **argv)
 {
     //test_resize("data/bad.jpg");
     //test_box();
     //test_convolutional_layer();
+    sock_id = waiting_clients("222");
+    char message[256];
+    bzero(message, 256);
+    int n = read(sock_id, message, 255);
+    if (n < 0) {
+        error("ERROR reading from socket");
+    }
+    printf("\n%s\n", message);
+
     if(argc < 2){
         fprintf(stderr, "usage: %s <function>\n", argv[0]);
         return 0;
     }
-    gpu_index = find_int_arg(argc, argv, "-i", 0);
-    if(find_arg(argc, argv, "-nogpu")) {
-        gpu_index = -1;
-    }
-
-#ifndef GPU
     gpu_index = -1;
-#else
-    if(gpu_index >= 0){
-        cuda_set_device(gpu_index);
-    }
-#endif
 
     if (0 == strcmp(argv[1], "average")){
         average(argc, argv);

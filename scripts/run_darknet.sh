@@ -2,4 +2,4 @@
 
 rm darknet
 make -j2
-./darknet detect cfg/yolo.cfg weights/yolo.weights data/dog.jpg
+sudo ./darknet detect cfg/yolo.cfg weights/yolo.weights data/dog.jpg
