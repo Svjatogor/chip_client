@@ -596,11 +596,7 @@ void save_image_png(image im, const char *name)
 
 void save_image(image im, const char *name)
 {
-#ifdef OPENCV
-    save_image_jpg(im, name);
-#else
     save_image_png(im, name);
-#endif
 }
 
 
