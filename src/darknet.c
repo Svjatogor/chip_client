@@ -419,11 +419,13 @@ int waiting_clients(char* port) {
 int main(int argc, char **argv)
 {
     gpu_index = -1;
-    printf("Waiting client\n");
+    printf("Waiting client...\n");
     // connection to client
     sock_id = waiting_clients("222");
     printf("Connection successful\n");
-    char message[256] = "Successful";
+    char message[256];
+    bzero(message, 256);
+    strcpy(message, "Successful");
     send_message(message);
 
 //    if(argc < 2){
