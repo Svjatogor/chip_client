@@ -1,6 +1,26 @@
 cmake_minimum_required(VERSION 3.0)
 project(darknet C CXX)
 
+set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${PROJECT_SOURCE_DIR}/cmake")
+
+#include(CheckCXXCompilerFlag)
+#CHECK_CXX_COMPILER_FLAG("-std=c++11" COMPILER_SUPPORTS_CXX11)
+#CHECK_CXX_COMPILER_FLAG("-std=c++0x" COMPILER_SUPPORTS_CXX0X)
+#if(COMPILER_SUPPORTS_CXX11)
+#    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
+#    set(CUDA_NVCC_FLAGS "${CUDA_NVCC_FLAGS} -std=c++11")
+#elseif(COMPILER_SUPPORTS_CXX0X)
+#    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++0x")
+#    set(CUDA_NVCC_FLAGS "${CUDA_NVCC_FLAGS} -std=c++0x")
+#else()
+#        message(STATUS "The compiler ${CMAKE_CXX_COMPILER} has no C++11 support.")
+#endif()
+#
+### Compiler settings
+#if(CMAKE_COMPILER_IS_GNUCXX)
+#    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wl,--export-dynamic -Wall -Wno-sign-compare -fPIC")
+#endif()
+
 SET(CMAKE_SYSTEM_NAME Linux)
 SET(CMAKE_C_COMPILER arm-linux-gnueabihf-gcc)
 SET(CMAKE_CXX_COMPILER arm-linux-gnueabihf-g++)
@@ -8,31 +28,11 @@ SET(CMAKE_ASM_COMPILER arm-linux-gnueabihf-gcc)
 SET(CMAKE_SYSTEM_PROCESSOR arm)
 
 #ADD_DEFINITIONS("-march=armv6")
-add_definitions("-mcpu=armv7 -mfpu=vfp -mfloat-abi=hard -marm")
-
-# avoids annoying and pointless warnings from gcc
-SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -U_FORTIFY_SOURCE")
-SET(CMAKE_ASM_FLAGS "${CMAKE_ASM_FLAGS} -c")
-
-set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${PROJECT_SOURCE_DIR}/cmake")
-
-include(CheckCXXCompilerFlag)
-CHECK_CXX_COMPILER_FLAG("-std=c++11" COMPILER_SUPPORTS_CXX11)
-CHECK_CXX_COMPILER_FLAG("-std=c++0x" COMPILER_SUPPORTS_CXX0X)
-if(COMPILER_SUPPORTS_CXX11)
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
-    set(CUDA_NVCC_FLAGS "${CUDA_NVCC_FLAGS} -std=c++11")
-elseif(COMPILER_SUPPORTS_CXX0X)
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++0x")
-    set(CUDA_NVCC_FLAGS "${CUDA_NVCC_FLAGS} -std=c++0x")
-else()
-        message(STATUS "The compiler ${CMAKE_CXX_COMPILER} has no C++11 support.")
-endif()
-
-## Compiler settings
-if(CMAKE_COMPILER_IS_GNUCXX)
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wl,--export-dynamic -Wall -Wno-sign-compare -fPIC")
-endif()
+#add_definitions("-mcpu=arm7 -mfpu=vfp -mfloat-abi=hard -marm")
+#
+## avoids annoying and pointless warnings from gcc
+#SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -U_FORTIFY_SOURCE")
+#SET(CMAKE_ASM_FLAGS "${CMAKE_ASM_FLAGS} -c")
 
 #thread
 FIND_PACKAGE(Threads)
