@@ -6,11 +6,12 @@
 #include "utils.h"
 #include <unistd.h>
 #include <string.h>
+#include <sys/socket.h>
+
 extern int sock_id;
 
 void send_message(const char* message) {
-    int size = sizeof(message);
-    int n = write(sock_id, message, 255);
+    int n = send(sock_id, message, 255, 0);
 
     if (n < 0) {
         error("ERROR message not send");
@@ -18,7 +19,7 @@ void send_message(const char* message) {
 }
 
 void get_message(char* message) {
-    int n = read(sock_id, message, 255);
+    int n = recv(sock_id, message, 255, 0);
     if (n < 0) {
         error("ERROR message not get");
     }
@@ -33,7 +34,7 @@ void send_image(const char* file_name) {
     fseek(picture, 0, SEEK_SET);
     printf("size image: %d", size);
     // send picture size
-    int n = write(sock_id, &size, sizeof(size));
+    int n = send(sock_id, &size, sizeof(size), 0);
     if (n < 0) {
         error("ERROR size image not send");
     }
@@ -42,7 +43,7 @@ void send_image(const char* file_name) {
     char send_buffer[size];
     while(!feof(picture)) {
         fread(send_buffer, 1, sizeof(send_buffer), picture);
-        n = write(sock_id, send_buffer, sizeof(send_buffer));
+        n = send(sock_id, send_buffer, sizeof(send_buffer), 0);
         if (n < 0) {
             error("ERROR image not send");;
         }
@@ -54,13 +55,19 @@ void get_image(char *file_name) {
     bzero(file_name, sizeof(file_name));
     strcpy(file_name, "img_for_detect");
     int size;
-    int n = read(sock_id, &size, sizeof(int));
+    int n;
+    n = recv(sock_id, &size, sizeof(int), 0);
     if (n < 0) {
         error("ERROR size image not received");
     }
     printf("Size image: %d\nReading image...\n", size);
     char image_bytes[size];
-    n = read(sock_id, image_bytes, size);
+    char* point_image = image_bytes;
+    while (size > 0) {
+        n = recv(sock_id, point_image, size, 0);
+        point_image += n;
+        size -= n;
+    }
     if (n < 0) {
         error("ERROR image not received");
     }

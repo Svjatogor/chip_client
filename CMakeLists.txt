@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.6)
+cmake_minimum_required(VERSION 3.0)
 project(darknet C CXX)
 
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${PROJECT_SOURCE_DIR}/cmake")
@@ -41,13 +41,13 @@ else()
 endif()
 
 #BOOST
-FIND_PACKAGE(Boost REQUIRED python)
-FIND_PACKAGE(PythonLibs REQUIRED)
-FIND_PACKAGE(OpenCV REQUIRED)
-
-include_directories(SYSTEM ${Boost_INCLUDE_DIR})
-include_directories(SYSTEM ${PYTHON_INCLUDE_DIR})
-include_directories(SYSTEM ${OpenCV_INCLUDE_DIR})
+#FIND_PACKAGE(Boost REQUIRED python)
+#FIND_PACKAGE(PythonLibs REQUIRED)
+#FIND_PACKAGE(OpenCV REQUIRED)
+#
+#include_directories(SYSTEM ${Boost_INCLUDE_DIR})
+#include_directories(SYSTEM ${PYTHON_INCLUDE_DIR})
+#include_directories(SYSTEM ${OpenCV_INCLUDE_DIR})
 
 include_directories(src)
 set(SRC_DIR src)
