@@ -1,6 +1,19 @@
 cmake_minimum_required(VERSION 3.0)
 project(darknet C CXX)
 
+SET(CMAKE_SYSTEM_NAME Linux)
+SET(CMAKE_C_COMPILER arm-linux-gnueabihf-gcc)
+SET(CMAKE_CXX_COMPILER arm-linux-gnueabihf-g++)
+SET(CMAKE_ASM_COMPILER arm-linux-gnueabihf-gcc)
+SET(CMAKE_SYSTEM_PROCESSOR arm)
+
+#ADD_DEFINITIONS("-march=armv6")
+add_definitions("-mcpu=armv7 -mfpu=vfp -mfloat-abi=hard -marm")
+
+# avoids annoying and pointless warnings from gcc
+SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -U_FORTIFY_SOURCE")
+SET(CMAKE_ASM_FLAGS "${CMAKE_ASM_FLAGS} -c")
+
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${PROJECT_SOURCE_DIR}/cmake")
 
 include(CheckCXXCompilerFlag)
