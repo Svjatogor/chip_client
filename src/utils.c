@@ -6,6 +6,7 @@
 #include <unistd.h>
 #include <float.h>
 #include <limits.h>
+#include <arm_neon.h>
 
 #include "utils.h"
 
@@ -423,10 +424,29 @@ float *parse_fields(char *line, int n)
 
 float sum_array(float *a, int n)
 {
-    int i;
-    float sum = 0;
-    for(i = 0; i < n; ++i) sum += a[i];
-    return sum;
+    float32_t arr[4],add;
+    float32x4_t acc= vdupq_n_f32(0.0);
+    do
+    {
+        float32x4_t vec=vld1q_f32(array);
+        array += 4;
+        acc = vaddq_f32(acc,vec);
+        size-=4;
+    }
+    while (size >= 4);
+
+    vst1q_f32(arr, acc);
+
+    add = arr[0] + arr[1] + arr[2] + arr[3];
+
+    if (size) {
+        for (; size > 0; size--) {
+            add+=(*array);
+            array++;
+        }
+    }
+
+    return add;
 }
 
 float mean_array(float *a, int n)

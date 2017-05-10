@@ -15,7 +15,6 @@
 #include "socket_work.h"
 #include <stdint.h>
 #include <assert.h>
-#include <arm_neon.h>
 
 extern void predict_classifier(char *datacfg, char *cfgfile, char *weightfile, char *filename, int top);
 extern void test_detector(char *datacfg, char *cfgfile, char *weightfile, char *filename, float thresh, float hier_thresh);
@@ -418,26 +417,6 @@ int waiting_clients(char* port) {
 
     return newsockfd;
 }
-
-/* return the sum of all elements in an array. This works by calculating 4 totals (one for each lane) and adding those at the end to get the final total */
-float32_t sum_array_neon(float32_t *array, int size)
-{
-    float32_t arr[4],add;
-    float32x4_t acc= vdupq_n_f32(0.0);
-    for (; size != 0; size -= 4)
-    {
-        float32x4_t vec=vld1q_f32(array);
-        array += 4;
-        acc = vaddq_f32(acc,vec);
-    }
-
-    vst1q_f32(arr, acc);
-
-    add = arr[0] + arr[1] + arr[2] + arr[3];
-
-    return add;
-}
-
 
 int main(int argc, char **argv)
 {
