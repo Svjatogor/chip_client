@@ -420,30 +420,22 @@ int waiting_clients(char* port) {
 }
 
 /* return the sum of all elements in an array. This works by calculating 4 totals (one for each lane) and adding those at the end to get the final total */
-float sum_array_neon(float16_t *array, int size)
+float32_t sum_array_neon(float32_t *array, int size)
 {
-    /* initialize the accumulator vector to zero */
-    float16x4_t acc = vdup_n_s16(0);
-    float32x2_t acc1;
-    float64x1_t acc2;
-    /* this implementation assumes the size of the array is a multiple of 4 */
-    assert((size % 4) == 0);
-    /* counting backwards gives better code */
+    float32_t arr[4],add;
+    float32x4_t acc= vdupq_n_f32(0.0);
     for (; size != 0; size -= 4)
     {
-        float16x4_t vec;
-        /* load 4 values in parallel from the array */
-        vec = vld1_s16(array);
-        /* increment the array pofloater to the next element */
+        float32x4_t vec=vld1q_f32(array);
         array += 4;
-        /* add the vector to the accumulator vector */
-        acc = vadd_s16(acc, vec);
+        acc = vaddq_f32(acc,vec);
     }
-    /* calculate the total */
-    acc1 = vpaddl_s16(acc);
-    acc2 = vpaddl_s32(acc1);
-    /* return the total as an floateger */
-    return (float)vget_lane_s64(acc2, 0);
+
+    vst1q_f32(arr, acc);
+
+    add = arr[0] + arr[1] + arr[2] + arr[3];
+
+    return add;
 }
 
 

@@ -1,5 +1,8 @@
 #!/usr/bin/env bash
 
-rm darknet
+cd build
+cmake .. -DCMAKE_BUILD_TYPE=Release
 make -j2
-sudo ./darknet detect cfg/yolo.cfg weights/yolo.weights data/dog.jpg
+cp darknet ../
+cd ..
+./darknet detect cfg/yolo.cfg weights/yolo.weights data/dog.jpg
