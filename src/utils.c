@@ -426,27 +426,28 @@ float sum_array(float *a, int n)
 {
     float32_t arr[4],add;
     float32x4_t acc= vdupq_n_f32(0.0);
+    int inc = 0;
     do
     {
-        float32x4_t vec=vld1q_f32(array);
-        array += 4;
+        float32x4_t vec=vld1q_f32(a + inc);
         acc = vaddq_f32(acc,vec);
-        size-=4;
+        n-=4;
+        inc += 4;
     }
-    while (size >= 4);
+    while (n >= 4);
 
     vst1q_f32(arr, acc);
 
     add = arr[0] + arr[1] + arr[2] + arr[3];
 
-    if (size) {
-        for (; size > 0; size--) {
-            add+=(*array);
-            array++;
+    if (n) {
+        for (; n > 0; n--) {
+            add+=(*a);
+            a++;
         }
     }
 
-    return add;
+    return (float)add;
 }
 
 float mean_array(float *a, int n)
