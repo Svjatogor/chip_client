@@ -13,13 +13,13 @@ int connectToServer() {
     struct hostent *server;
 
     char buffer[256];
-    portno = atoi("222");
+    portno = atoi("224");
     sockfd = socket(AF_INET, SOCK_STREAM, 0);
     if (sockfd < 0) {
         return -1;
     }
-    //server = gethostbyname("10.42.0.97");
     server = gethostbyname("localhost");
+    //server = gethostbyname("192.168.0.9");
     if (server == NULL) {
         fprintf(stderr,"ERROR, no such host\n");
         exit(0);
@@ -40,7 +40,7 @@ void closeSocket(int sock_id) {
 }
 
 int readMessage(int sock_id, char* buffer) {
-    int n = read(sock_id, buffer, 255);
+    int n = recv(sock_id, buffer, 255, 0);
     if (n < 0) {
         return -1;
     }
@@ -49,7 +49,7 @@ int readMessage(int sock_id, char* buffer) {
 
 int writeMessage(int sock_id, char* buffer) {
     int count = strlen(buffer);
-    int n = write(sock_id,buffer, count);
+    int n = send(sock_id,buffer, 255, 0);
     if (n < 0) {
         return -1;
     }
@@ -65,7 +65,7 @@ int sendImage(int sock_id, char *file_name) {
     fseek(picture, 0, SEEK_SET);
 
     // send picture size
-    int n = write(sock_id, &size, sizeof(size));
+    int n = send(sock_id, &size, sizeof(size), 0);
     if (n < 0) {
         return -1;
     }
@@ -74,7 +74,7 @@ int sendImage(int sock_id, char *file_name) {
     char send_buffer[size];
     while(!feof(picture)) {
         fread(send_buffer, 1, sizeof(send_buffer), picture);
-        n = write(sock_id, send_buffer, sizeof(send_buffer));
+        n = send(sock_id, send_buffer, sizeof(send_buffer), 0);
         if (n < 0) {
             return -1;
         }
@@ -88,15 +88,17 @@ void get_image(int sock_id, char* file_name) {
     bzero(file_name, sizeof(file_name));
     strcpy(file_name, "predictions.png");
     int size;
-    int n = read(sock_id, &size, sizeof(int));
+    int n = recv(sock_id, &size, sizeof(int), 0);
     if (n < 0) {
         return;
     }
     printf("Size image: %d\nReading image...\n", size);
     char image_bytes[size];
+    char *point = image_bytes;
     n = 0;
     while (size > 0) {
-        n = read(sock_id, image_bytes + n, size);
+        n = recv(sock_id, point, size, 0);
+        point += n;
         if (n < 0) {
             return;
         }

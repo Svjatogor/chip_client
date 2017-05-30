@@ -9,6 +9,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
     ui->setupUi(this);
     ui->stackedWidget->setCurrentIndex(0);
+    ui->logsText->setReadOnly(true);
     setWindowTitle("Chip Vision");
 
     _receiver_thread = new QThread;
@@ -16,6 +17,11 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->connectButton, SIGNAL(clicked(bool)), this, SLOT(connectToChip()));
     connect(ui->selectImgButton, SIGNAL(clicked(bool)), this, SLOT(openPicture()));
     connect(ui->runButton, SIGNAL(clicked(bool)), this, SLOT(sendPicture()));
+    connect(ui->radioButtonClassif, SIGNAL(toggled(bool)), this, SLOT(setComboBoxList()));
+    connect(ui->radioButtonDetect, SIGNAL(toggled(bool)), this, SLOT(setComboBoxList()));
+    connect(ui->stackedWidget, SIGNAL(currentChanged(int)), this, SLOT(showOrHideLayout(int)));
+
+    ui->radioButtonDetect->setChecked(true);
 }
 
 MainWindow::~MainWindow() {
@@ -28,6 +34,7 @@ void MainWindow::connectToChip() {
     if (_socketId != -1) {
         _worker = new SocketWorker(_socketId);
         _worker->moveToThread(_receiver_thread);
+
         connect(_receiver_thread, SIGNAL(started()), _worker, SLOT(receivingMessages()));
         connect(_worker, SIGNAL(messageReceived(QString)), this, SLOT(appendToLog(QString)));
         connect(_worker, SIGNAL(finished(QString)), _receiver_thread, SLOT(quit()));
@@ -46,9 +53,10 @@ void MainWindow::connectToChip() {
 void MainWindow::sendPicture() {
     char* char_file_name = _file_name.toLocal8Bit().data();
     // send image
+    writeMessage(_socketId, "run");
     int n = sendImage(_socketId, char_file_name);
     if (n != -1) {
-        ui->logsText->appendPlainText("Sending of image successful");
+        ui->logsText->appendPlainText("\nSending of image successful");
     }
     _receiver_thread->start();
 }
@@ -76,4 +84,27 @@ void MainWindow::showPicture(QString file_name) {
     int w = ui->labelImage->width();
     int h = ui->labelImage->height();
     ui->labelImage->setPixmap(img.scaled(w, h, Qt::KeepAspectRatio));
+}
+
+void MainWindow::setComboBoxList() {
+    ui->comboBoxModels->clear();
+    QStringList list_items;
+    if (ui->radioButtonClassif->isChecked()) {
+        list_items << "AlexNet" << "Darknet Reference" << "VGG-16" << "Darknet19";
+    }
+    else {
+        list_items << "YOLOv2" << "YOLOv2 544x544" << "Tiny YOLO";
+    }
+    ui->comboBoxModels->insertItems(0, list_items);
+}
+
+void MainWindow::closeEvent(QCloseEvent *event) {
+    closeSocket(_socketId);
+    writeMessage(_socketId, "exit");
+}
+
+void MainWindow::showOrHideLayout(int current) {
+    if (current == 1) {
+        ui->verticalLayoutTasks->widget()->hide();
+    }
 }

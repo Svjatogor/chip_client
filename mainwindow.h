@@ -6,6 +6,7 @@
 #include "tcp_client.h"
 #include "socketworker.h"
 #include <QThread>
+#include "imagelabel.h"
 
 namespace Ui {
 class MainWindow;
@@ -26,6 +27,8 @@ public slots:
     void openPicture();
     void appendToLog(QString message);
     void showPicture(QString file_name);
+    void setComboBoxList();
+    void showOrHideLayout(int);
 
 private:
     Ui::MainWindow *ui;
@@ -33,6 +36,8 @@ private:
     QString _file_name;
     SocketWorker* _worker;
     QThread* _receiver_thread;
+    void closeEvent(QCloseEvent *event);
+    ImageLabel* image_widget;
 };
 
 #endif // MAINWINDOW_H
