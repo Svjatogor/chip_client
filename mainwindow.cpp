@@ -19,7 +19,9 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->runButton, SIGNAL(clicked(bool)), this, SLOT(sendPicture()));
     connect(ui->radioButtonClassif, SIGNAL(toggled(bool)), this, SLOT(setComboBoxList()));
     connect(ui->radioButtonDetect, SIGNAL(toggled(bool)), this, SLOT(setComboBoxList()));
-    connect(ui->stackedWidget, SIGNAL(currentChanged(int)), this, SLOT(showOrHideLayout(int)));
+    connect(ui->stackedWidget, SIGNAL(currentChanged(int)), this, SLOT(setWidgetSettings(int)));
+
+    image_widget = new ImageLabel(this);
 
     ui->radioButtonDetect->setChecked(true);
 }
@@ -81,9 +83,7 @@ void MainWindow::showPicture(QString file_name) {
         file_name = QString(filename);
     }
     QPixmap img(file_name);
-    int w = ui->labelImage->width();
-    int h = ui->labelImage->height();
-    ui->labelImage->setPixmap(img.scaled(w, h, Qt::KeepAspectRatio));
+    image_widget->setPixmap(img);
 }
 
 void MainWindow::setComboBoxList() {
@@ -103,8 +103,10 @@ void MainWindow::closeEvent(QCloseEvent *event) {
     writeMessage(_socketId, "exit");
 }
 
-void MainWindow::showOrHideLayout(int current) {
+void MainWindow::setWidgetSettings(int current) {
     if (current == 1) {
-        ui->verticalLayoutTasks->widget()->hide();
+        ui->verticalLayoutTasks->addWidget(image_widget);
+        QPixmap img("start.png");
+        image_widget->setPixmap(img);
     }
 }

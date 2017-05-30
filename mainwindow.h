@@ -28,7 +28,7 @@ public slots:
     void appendToLog(QString message);
     void showPicture(QString file_name);
     void setComboBoxList();
-    void showOrHideLayout(int);
+    void setWidgetSettings(int);
 
 private:
     Ui::MainWindow *ui;
