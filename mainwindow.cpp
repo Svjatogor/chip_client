@@ -22,7 +22,7 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->stackedWidget, SIGNAL(currentChanged(int)), this, SLOT(setWidgetSettings(int)));
 
     image_widget = new ImageLabel(this);
-
+    image_widget->setMinimumSize(300, 200);
     ui->radioButtonDetect->setChecked(true);
 }
 

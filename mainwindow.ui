@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>595</width>
-    <height>426</height>
+    <width>567</width>
+    <height>388</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -18,7 +18,7 @@
     <item row="0" column="0">
      <widget class="QStackedWidget" name="stackedWidget">
       <property name="currentIndex">
-       <number>1</number>
+       <number>0</number>
       </property>
       <widget class="QWidget" name="page">
        <layout class="QGridLayout" name="gridLayout_3">
@@ -53,32 +53,22 @@
             <property name="title">
              <string>Select task</string>
             </property>
-            <widget class="QRadioButton" name="radioButtonDetect">
-             <property name="geometry">
-              <rect>
-               <x>12</x>
-               <y>29</y>
-               <width>125</width>
-               <height>20</height>
-              </rect>
-             </property>
-             <property name="text">
-              <string>Object detection</string>
-             </property>
-            </widget>
-            <widget class="QRadioButton" name="radioButtonClassif">
-             <property name="geometry">
-              <rect>
-               <x>12</x>
-               <y>55</y>
-               <width>146</width>
-               <height>20</height>
-              </rect>
-             </property>
-             <property name="text">
-              <string>Object classification</string>
-             </property>
-            </widget>
+            <layout class="QVBoxLayout" name="verticalLayout">
+             <item>
+              <widget class="QRadioButton" name="radioButtonDetect">
+               <property name="text">
+                <string>Object detection</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QRadioButton" name="radioButtonClassif">
+               <property name="text">
+                <string>Object classification</string>
+               </property>
+              </widget>
+             </item>
+            </layout>
            </widget>
           </item>
           <item>
@@ -118,7 +108,7 @@
       </property>
       <property name="maximumSize">
        <size>
-        <width>500</width>
+        <width>300</width>
         <height>16777215</height>
        </size>
       </property>
