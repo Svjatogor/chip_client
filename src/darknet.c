@@ -407,7 +407,7 @@ int waiting_clients(char* port) {
     if (bind(sockfd, (struct sockaddr *) &serv_addr,
              sizeof(serv_addr)) < 0)
         error("ERROR on binding");
-    listen(sockfd,5);
+    listen(sockfd,1);
     client = sizeof(cli_addr);
     newsockfd = accept(sockfd,
                        (struct sockaddr *) &cli_addr,
@@ -448,6 +448,7 @@ int main(int argc, char **argv)
             get_image(image_path);
             printf("Picture received: %s\n", image_path);
             test_detector("cfg/coco.data", "cfg/yolo.cfg", "weights/yolo.weights", image_path, thresh, .5);
+            //test_detector("cfg/voc.data", "cfg/tiny-yolo-voc.cfg", "weights/tiny-yolo-voc.weights", image_path, .36, .5);
         }
         else {
             break;
