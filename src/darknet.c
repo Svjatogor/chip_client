@@ -419,6 +419,10 @@ int waiting_clients(char* port) {
 int main(int argc, char **argv)
 {
     gpu_index = -1;
+    char image_path[256];
+    float thresh = .24;
+    char command[256] = "";
+
     printf("\nWaiting client...\n");
     // connection to client
     sock_id = waiting_clients("224");
@@ -427,30 +431,31 @@ int main(int argc, char **argv)
     bzero(message, 256);
     strcpy(message, "Successful");
     send_message(message);
-
-//    if(argc < 2){
-//        fprintf(stderr, "usage: %s <function>\n", argv[0]);
-//        return 0;
-//    }
-
-    // receiving picture
-    char image_path[256];
-    float thresh = find_float_arg(argc, argv, "-thresh", .24);
-
+    char submit[256] = "Sending of image successful";
     while (1) {
-
-        char messag[256];
-        bzero(messag, 256);
-        get_message(messag);
-        if (strcmp(messag, "run") == 0) {
+        printf("Waiting command...\n");
+        get_message(command);
+        if (strcmp(command, "yolo") == 0) {
+            send_message("ok");
+            // getting the image for detection
             printf("Waiting picture...\n");
             get_image(image_path);
             printf("Picture received: %s\n", image_path);
-            //test_detector("cfg/coco.data", "cfg/yolo.cfg", "weights/yolo.weights", image_path, thresh, .5);
-            test_detector("cfg/voc.data", "cfg/tiny-yolo-voc.cfg", "weights/tiny-yolo-voc.weights", image_path, thresh, .5);
+            send_message(submit);
+            // getting the configuration type
+            get_message(command);
+            printf("Configuration type: %s\n", command);
+            // run detection
+            if (strcmp(command, "YOLOv2") == 0) {
+                test_detector("cfg/coco.data", "cfg/yolo.cfg", "weights/yolo.weights", image_path, thresh, .5);
+            }
+            else if (strcmp(command, "Tiny YOLO") == 0){
+                test_detector("cfg/voc.data", "cfg/tiny-yolo-voc.cfg", "weights/tiny-yolo-voc.weights", image_path, thresh, .5);
+            }
+            printf("\n");
         }
-        else if (strlen(messag) == 0) {
-            printf("fuck");
+        else if (strcmp(command, "exit") == 0) {
+            printf("client has gone\n");
             break;
         }
     }

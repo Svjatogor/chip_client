@@ -597,11 +597,14 @@ void test_detector(char *datacfg, char *cfgfile, char *weightfile, char *filenam
 
     image **alphabet = load_alphabet();
     network net = parse_network_cfg(cfgfile);
-    send_message("Parsing configuration is complete");
+
+    char submit[256] = "Parsing configuration is complete";
+    send_message(submit);
 
     if(weightfile){
         load_weights(&net, weightfile);
-        send_message("Loading of weights finished");
+        strcpy(submit, "Loading of weights finished");
+        send_message(submit);
     }
     set_batch_network(&net, 1);
     srand(2222222);
@@ -622,7 +625,8 @@ void test_detector(char *datacfg, char *cfgfile, char *weightfile, char *filenam
         }
         image im = load_image_color(input,0,0);
         image sized = letterbox_image(im, net.w, net.h);
-        send_message("Loading of image finish");
+        strcpy(submit, "Loading of image finish");
+        send_message(submit);
         //image sized = resize_image(im, net.w, net.h);
         //image sized2 = resize_max(im, net.w);
         //image sized = crop_image(sized2, -((net.w - sized2.w)/2), -((net.h - sized2.h)/2), net.w, net.h);
@@ -636,7 +640,8 @@ void test_detector(char *datacfg, char *cfgfile, char *weightfile, char *filenam
         float *X = sized.data;
         char time_info[256];
         bzero(time_info, 256);
-        send_message("Start predict");
+        strcpy(submit, "Start predict");
+        send_message(submit);
         time=clock();
         network_predict(net, X);
 
@@ -651,7 +656,8 @@ void test_detector(char *datacfg, char *cfgfile, char *weightfile, char *filenam
         //else if (nms) do_nms_sort(boxes, probs, l.w*l.h*l.n, l.classes, nms);
         draw_detections(im, l.w*l.h*l.n, thresh, boxes, probs, names, alphabet, l.classes);
         save_image(im, "predictions");
-        send_image("predictions.png");
+        strcpy(submit, "predictions.png");
+        send_image(submit);
 
         free_image(im);
         free_image(sized);

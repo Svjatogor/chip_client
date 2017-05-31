@@ -12,8 +12,9 @@ extern int sock_id;
 
 void send_message(const char* message) {
     int n = 0;
-    n = send(sock_id, message, 255, 0);
-
+    int size_message = strlen(message);
+    send(sock_id, &size_message, sizeof(size_message), 0);
+    n = send(sock_id, message, size_message, 0);
     if (n < 0) {
         error("ERROR message not send");
     }
@@ -22,9 +23,9 @@ void send_message(const char* message) {
 void get_message(char* message) {
     bzero(message, 256);
     int n = 0;
-    while (strlen(message) == 0) {
-        n = recv(sock_id, message, 255, 0);
-    }
+    int size_message = 0;
+    n = recv(sock_id, &size_message, sizeof(size_message), 0);
+    n = recv(sock_id, message, size_message, 0);
     if (n < 0) {
         error("ERROR message not get");
     }
@@ -47,14 +48,14 @@ void send_image(const char* file_name) {
 
     // send picture as byte array
     char send_buffer[size];
-    while(!feof(picture)) {
+    //while(!feof(picture)) {
         fread(send_buffer, 1, sizeof(send_buffer), picture);
         n = send(sock_id, send_buffer, sizeof(send_buffer), 0);
         if (n < 0) {
             error("ERROR image not send");;
         }
         bzero(send_buffer, sizeof(send_buffer));
-    }
+    //}
 }
 
 void get_image(char *file_name) {
