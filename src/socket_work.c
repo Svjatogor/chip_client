@@ -11,7 +11,8 @@
 extern int sock_id;
 
 void send_message(const char* message) {
-    int n = send(sock_id, message, 255, 0);
+    int n = 0;
+    n = send(sock_id, message, 255, 0);
 
     if (n < 0) {
         error("ERROR message not send");
@@ -19,7 +20,11 @@ void send_message(const char* message) {
 }
 
 void get_message(char* message) {
-    int n = recv(sock_id, message, 255, 0);
+    bzero(message, 256);
+    int n = 0;
+    while (strlen(message) == 0) {
+        n = recv(sock_id, message, 255, 0);
+    }
     if (n < 0) {
         error("ERROR message not get");
     }
@@ -28,13 +33,14 @@ void get_message(char* message) {
 void send_image(const char* file_name) {
     FILE *picture;
     picture = fopen(file_name, "r");
-    int size;
+    int size = 0;
     fseek(picture, 0, SEEK_END);
     size = ftell(picture);
     fseek(picture, 0, SEEK_SET);
     printf("size image: %d", size);
     // send picture size
-    int n = send(sock_id, &size, sizeof(size), 0);
+    int n = 0;
+    n = send(sock_id, &size, sizeof(size), 0);
     if (n < 0) {
         error("ERROR size image not send");
     }
@@ -54,8 +60,8 @@ void send_image(const char* file_name) {
 void get_image(char *file_name) {
     bzero(file_name, sizeof(file_name));
     strcpy(file_name, "img_for_detect");
-    int size;
-    int n;
+    int size = 0;
+    int n = 0;
     n = recv(sock_id, &size, sizeof(int), 0);
     if (n < 0) {
         error("ERROR size image not received");

@@ -405,7 +405,7 @@ int waiting_clients(char* port) {
     if (bind(sockfd, (struct sockaddr *) &serv_addr,
              sizeof(serv_addr)) < 0)
         error("ERROR on binding");
-    listen(sockfd,5);
+    listen(sockfd,1);
     client = sizeof(cli_addr);
     newsockfd = accept(sockfd,
                        (struct sockaddr *) &cli_addr,
@@ -421,7 +421,7 @@ int main(int argc, char **argv)
     gpu_index = -1;
     printf("\nWaiting client...\n");
     // connection to client
-    sock_id = waiting_clients("222");
+    sock_id = waiting_clients("224");
     printf("Connection successful\n");
     char message[256];
     bzero(message, 256);
@@ -438,6 +438,7 @@ int main(int argc, char **argv)
     float thresh = find_float_arg(argc, argv, "-thresh", .24);
 
     while (1) {
+
         char messag[256];
         bzero(messag, 256);
         get_message(messag);
@@ -445,12 +446,13 @@ int main(int argc, char **argv)
             printf("Waiting picture...\n");
             get_image(image_path);
             printf("Picture received: %s\n", image_path);
-            test_detector("cfg/coco.data", "cfg/yolo.cfg", "weights/yolo.weights", image_path, thresh, .5);
+            //test_detector("cfg/coco.data", "cfg/yolo.cfg", "weights/yolo.weights", image_path, thresh, .5);
+            test_detector("cfg/voc.data", "cfg/tiny-yolo-voc.cfg", "weights/tiny-yolo-voc.weights", image_path, thresh, .5);
         }
-        else {
+        else if (strlen(messag) == 0) {
+            printf("fuck");
             break;
         }
-
     }
     close_sock();
     return 0;

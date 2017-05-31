@@ -1,3 +1,3 @@
 #!/bin/bash
 
-scp -r -P228 src/ chip@10.42.0.97:~/darknet/
+scp -r -P228 src/ cfg/ CMakeLists.txt chip@192.168.0.9:~/darknet/
