@@ -570,9 +570,9 @@ float network_accuracy_multi(network net, data d, int n)
 void free_network(network net)
 {
     int i;
-    for(i = 0; i < net.n; ++i){
-        free_layer(net.layers[i]);
-    }
+//    for(i = 0; i < net.n; ++i){
+//        free_layer(net.layers[i]);
+//    }
     free(net.layers);
     if(net.input) free(net.input);
     if(net.truth) free(net.truth);
@@ -608,4 +608,3 @@ float *network_output(network net)
 {
     return network_output_layer(net).output;
 }
-

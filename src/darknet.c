@@ -425,7 +425,7 @@ int main(int argc, char **argv)
 
     printf("\nWaiting client...\n");
     // connection to client
-    sock_id = waiting_clients("224");
+    sock_id = waiting_clients("222");
     printf("Connection successful\n");
     char message[256];
     bzero(message, 256);
@@ -453,6 +453,9 @@ int main(int argc, char **argv)
                 test_detector("cfg/voc.data", "cfg/tiny-yolo-voc.cfg", "weights/tiny-yolo-voc.weights", image_path, thresh, .5);
             }
             printf("\n");
+        }
+        else if (strcmp(command, "classify") == 0) {
+
         }
         else if (strcmp(command, "exit") == 0) {
             printf("client has gone\n");

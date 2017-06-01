@@ -659,6 +659,7 @@ void test_detector(char *datacfg, char *cfgfile, char *weightfile, char *filenam
         strcpy(submit, "predictions.png");
         send_image(submit);
 
+        free_network(net);
         free_image(im);
         free_image(sized);
         free(boxes);
