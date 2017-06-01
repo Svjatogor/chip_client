@@ -442,24 +442,15 @@ int main(int argc, char **argv)
             get_image(image_path);
             printf("Picture received: %s\n", image_path);
             send_message(submit);
-            // getting the configuration type
-            get_message(command);
-            printf("Configuration type: %s\n", command);
-            // run detection
-            if (strcmp(command, "YOLOv2") == 0) {
-                test_detector("cfg/coco.data", "cfg/yolo.cfg", "weights/yolo.weights", image_path, thresh, .5);
-            }
-            else if (strcmp(command, "Tiny YOLO") == 0){
-                test_detector("cfg/voc.data", "cfg/tiny-yolo-voc.cfg", "weights/tiny-yolo-voc.weights", image_path, thresh, .5);
-            }
+            test_detector("cfg/voc.data", "cfg/tiny-yolo-voc.cfg", "weights/tiny-yolo-voc.weights", image_path, thresh, .5);
             printf("\n");
         }
-        else if (strcmp(command, "classify") == 0) {
-
-        }
         else if (strcmp(command, "exit") == 0) {
-            printf("client has gone\n");
+            printf("Client has gone\n");
             break;
+        }
+        else {
+            printf("Incorrect command\n");
         }
     }
     close_sock();

@@ -627,10 +627,9 @@ void test_detector(char *datacfg, char *cfgfile, char *weightfile, char *filenam
         image sized = letterbox_image(im, net.w, net.h);
         strcpy(submit, "Loading of image finish");
         send_message(submit);
-        //image sized = resize_image(im, net.w, net.h);
-        //image sized2 = resize_max(im, net.w);
-        //image sized = crop_image(sized2, -((net.w - sized2.w)/2), -((net.h - sized2.h)/2), net.w, net.h);
+
         //resize_network(&net, sized.w, sized.h);
+
         layer l = net.layers[net.n-1];
 
         box *boxes = calloc(l.w*l.h*l.n, sizeof(box));

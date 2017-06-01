@@ -60,7 +60,7 @@ void send_image(const char* file_name) {
 
 void get_image(char *file_name) {
     bzero(file_name, sizeof(file_name));
-    strcpy(file_name, "img_for_detect");
+    strcpy(file_name, "img_for_detect.png");
     int size = 0;
     int n = 0;
     n = recv(sock_id, &size, sizeof(int), 0);
