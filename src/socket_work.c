@@ -78,7 +78,6 @@ void get_image(char *file_name) {
     if (n < 0) {
         error("ERROR image not received");
     }
-    printf("Image received\n");
     // convert bytes to file
     FILE *image;
     image = fopen(file_name, "w");
