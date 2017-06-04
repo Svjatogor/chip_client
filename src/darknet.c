@@ -14,11 +14,12 @@
 #include "connected_layer.h"
 #include "socket_work.h"
 
-extern void test_detector(char *datacfg, char *cfgfile, char *weightfile, char *filename, float thresh, float hier_thresh);
+extern void run_detector(char *datacfg, char *cfgfile, char *weightfile, char *filename, float thresh, float hier_thresh);
 extern int sock_id;
 
 int waiting_clients(char* port) {
-    int sockfd, newsockfd, portno;
+    int sockfd, newsockfd;
+    int portno;
     socklen_t client;
     struct sockaddr_in serv_addr, cli_addr;
     sockfd = socket(AF_INET, SOCK_STREAM, 0);
@@ -39,7 +40,7 @@ int waiting_clients(char* port) {
                        &client);
     if (newsockfd < 0)
         error("ERROR on accept");
-
+    close(sockfd);
     return newsockfd;
 }
 
@@ -53,7 +54,7 @@ int main(int argc, char **argv)
     printf("\nWaiting client...\n");
 
     // connection to client
-    sock_id = waiting_clients("222");
+    sock_id = waiting_clients("1245");
     printf("Connection successful\n");
     send_message("Successful");
 
@@ -68,7 +69,7 @@ int main(int argc, char **argv)
             printf("Picture received: %s\n", image_path);
             send_message("Sending of image successful");
             // run detection
-            test_detector("cfg/voc.data", "cfg/tiny-yolo-voc.cfg", "weights/tiny-yolo-voc.weights", image_path, thresh, .5);
+            run_detector("cfg/voc.data", "cfg/tiny-yolo-voc.cfg", "weights/tiny-yolo-voc.weights", image_path, thresh, .5);
             printf("\n");
         }
         else if (strcmp(command, "exit") == 0) {
