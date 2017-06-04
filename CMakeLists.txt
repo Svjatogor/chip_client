@@ -40,15 +40,6 @@ else()
     list(APPEND LIBRARIES "m")
 endif()
 
-#BOOST
-#FIND_PACKAGE(Boost REQUIRED python)
-#FIND_PACKAGE(PythonLibs REQUIRED)
-#FIND_PACKAGE(OpenCV REQUIRED)
-#
-#include_directories(SYSTEM ${Boost_INCLUDE_DIR})
-#include_directories(SYSTEM ${PYTHON_INCLUDE_DIR})
-#include_directories(SYSTEM ${OpenCV_INCLUDE_DIR})
-
 include_directories(src)
 set(SRC_DIR src)
 
@@ -75,7 +66,6 @@ set(CUDA_NVCC_FLAGS ${CUDA_NVCC_FLAGS} "--ftz=true;--prec-div=false;--prec-sqrt=
 
 CUDA_COMPILE(cuda_objs ${CU_SRC_FILES})
 
-    
 message(STATUS "CUDA FOUND")
 endif()
 

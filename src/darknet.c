@@ -3,15 +3,11 @@
 #include <stdio.h>
 #include <string.h>
 #include <unistd.h>
-#include <sys/types.h>
 #include <sys/socket.h>
 #include <netinet/in.h>
 
 #include "parser.h"
 #include "utils.h"
-#include "cuda.h"
-#include "blas.h"
-#include "connected_layer.h"
 #include "socket_work.h"
 
 extern void run_detector(char *datacfg, char *cfgfile, char *weightfile, char *filename, float thresh, float hier_thresh);
