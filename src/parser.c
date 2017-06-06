@@ -615,6 +615,11 @@ int is_network(section *s)
             || strcmp(s->type, "[network]")==0);
 }
 
+/**
+ * Parse configuration neural network
+ * @param filename - file with configuration
+ * @return - the neural network object
+ */
 network parse_network_cfg(char *filename)
 {
     list *sections = read_cfg(filename);
@@ -694,10 +699,6 @@ network parse_network_cfg(char *filename)
             l = parse_dropout(options, params);
             l.output = net.layers[count-1].output;
             l.delta = net.layers[count-1].delta;
-#ifdef GPU
-            l.output_gpu = net.layers[count-1].output_gpu;
-            l.delta_gpu = net.layers[count-1].delta_gpu;
-#endif
         }else{
             fprintf(stderr, "Type not recognized: %s\n", s->type);
         }
@@ -729,22 +730,9 @@ network parse_network_cfg(char *filename)
     net.output = out.output;
     net.input = calloc(net.inputs*net.batch, sizeof(float));
     net.truth = calloc(net.truths*net.batch, sizeof(float));
-#ifdef GPU
-    net.output_gpu = out.output_gpu;
-    net.input_gpu = cuda_make_array(net.input, net.inputs*net.batch);
-    net.truth_gpu = cuda_make_array(net.truth, net.truths*net.batch);
-#endif
+
     if(workspace_size){
-        //printf("%ld\n", workspace_size);
-#ifdef GPU
-        if(gpu_index >= 0){
-            net.workspace = cuda_make_array(0, (workspace_size-1)/sizeof(float)+1);
-        }else {
-            net.workspace = calloc(1, workspace_size);
-        }
-#else
         net.workspace = calloc(1, workspace_size);
-#endif
     }
     return net;
 }
@@ -1048,21 +1036,17 @@ void load_convolutional_weights(layer l, FILE *fp)
         transpose_matrix(l.weights, l.c*l.size*l.size, l.n);
     }
     //if (l.binary) binarize_weights(l.weights, l.n, l.c*l.size*l.size, l.weights);
-#ifdef GPU
-    if(gpu_index >= 0){
-        push_convolutional_layer(l);
-    }
-#endif
 }
 
-
+/**
+ * Serializing the weights of a neural network
+ * @param net - the neural network object
+ * @param filename - file with weights
+ * @param start - index start layer
+ * @param cutoff - number of layers
+ */
 void load_weights_upto(network *net, char *filename, int start, int cutoff)
 {
-#ifdef GPU
-    if(net->gpu_index >= 0){
-        cuda_set_device(net->gpu_index);
-    }
-#endif
     fprintf(stderr, "Loading weights from %s...", filename);
     fflush(stdout);
     FILE *fp = fopen(filename, "rb");
@@ -1113,11 +1097,6 @@ void load_weights_upto(network *net, char *filename, int start, int cutoff)
             int size = l.size*l.size*l.c*l.n*locations;
             fread(l.biases, sizeof(float), l.outputs, fp);
             fread(l.weights, sizeof(float), size, fp);
-#ifdef GPU
-            if(gpu_index >= 0){
-                push_local_layer(l);
-            }
-#endif
         }
     }
     fprintf(stderr, "Done!\n");

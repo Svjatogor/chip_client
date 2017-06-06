@@ -169,6 +169,10 @@ network make_network(int n)
     return net;
 }
 
+/**
+ * Forward neural network
+ * @param net - neural network object
+ */
 void forward_network(network net)
 {
     int i;
@@ -285,17 +289,17 @@ float train_network(network net, data d)
     return (float)sum/(n*batch);
 }
 
+/**
+ * Set number of samples that going to be propagated through the network
+ * @param net - the neural network object
+ * @param b - number of samples
+ */
 void set_batch_network(network *net, int b)
 {
     net->batch = b;
     int i;
     for(i = 0; i < net->n; ++i){
         net->layers[i].batch = b;
-#ifdef CUDNN
-        if(net->layers[i].type == CONVOLUTIONAL){
-            cudnn_convolutional_setup(net->layers + i);
-        }
-#endif
     }
 }
 
@@ -428,12 +432,14 @@ void top_predictions(network net, int k, int *index)
     top_k(net.output, net.outputs, k, index);
 }
 
-
+/**
+ * Calculation of the output layer of a neural network
+ * @param net - neural network object
+ * @param input - input data
+ * @return - output of the last layer
+ */
 float *network_predict(network net, float *input)
 {
-#ifdef GPU
-    if(gpu_index >= 0)  return network_predict_gpu(net, input);
-#endif
     net.input = input;
     net.truth = 0;
     net.train = 0;

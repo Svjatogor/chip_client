@@ -1,7 +1,6 @@
 #include "activation_layer.h"
 #include "utils.h"
 #include "cuda.h"
-#include "blas.h"
 #include "gemm.h"
 
 #include <math.h>

@@ -13,11 +13,18 @@
 extern void run_detector(char *datacfg, char *cfgfile, char *weightfile, char *filename, float thresh, float hier_thresh);
 extern int sock_id;
 
+/***
+ * Waiting for clients to connect
+ * @param port - port number for connection
+ * @return - socket identifier
+ */
 int waiting_clients(char* port) {
     int sockfd, newsockfd;
     int portno;
     socklen_t client;
     struct sockaddr_in serv_addr, cli_addr;
+
+    // socket initialization
     sockfd = socket(AF_INET, SOCK_STREAM, 0);
     if (sockfd < 0)
         error("ERROR opening socket");
@@ -26,16 +33,21 @@ int waiting_clients(char* port) {
     serv_addr.sin_family = AF_INET;
     serv_addr.sin_addr.s_addr = INADDR_ANY;
     serv_addr.sin_port = htons(portno);
+
+    // waiting for connections
     if (bind(sockfd, (struct sockaddr *) &serv_addr,
              sizeof(serv_addr)) < 0)
         error("ERROR on binding");
     listen(sockfd,1);
     client = sizeof(cli_addr);
+
+    // initializing the client socket
     newsockfd = accept(sockfd,
                        (struct sockaddr *) &cli_addr,
                        &client);
     if (newsockfd < 0)
         error("ERROR on accept");
+
     close(sockfd);
     return newsockfd;
 }
@@ -57,6 +69,7 @@ int main(int argc, char **argv)
     while (1) {
         printf("Waiting command...\n");
         get_message(command);
+        // ?lient command processing
         if (strcmp(command, "yolo") == 0) {
             send_message("ok");
             // getting the image for detection

@@ -155,6 +155,10 @@ void draw_bbox(image a, box bbox, int w, float r, float g, float b)
     }
 }
 
+/**
+ * Character serialization
+ * @return - array of characters
+ */
 image **load_alphabet()
 {
     int i, j;
@@ -171,6 +175,17 @@ image **load_alphabet()
     return alphabets;
 }
 
+/**
+ * Drawing rectangles and object labels
+ * @param im - image
+ * @param num - number of objects
+ * @param thresh - threshold
+ * @param boxes - object boxes
+ * @param probs - probabilities of objects
+ * @param names - labes
+ * @param alphabet - alphabet array
+ * @param classes - number of classes
+ */
 void draw_detections(image im, int num, float thresh, box *boxes, float **probs, char **names, image **alphabet, int classes)
 {
     int i;
@@ -837,6 +852,13 @@ void letterbox_image_into(image im, int w, int h, image boxed)
     free_image(resized);
 }
 
+/**
+ * Convert image to letter box
+ * @param im
+ * @param w
+ * @param h
+ * @return
+ */
 image letterbox_image(image im, int w, int h)
 {
     int new_w = im.w;
@@ -1345,6 +1367,14 @@ image load_image_stb(char *filename, int channels)
     return im;
 }
 
+/**
+ * Image serialization
+ * @param filename - image file
+ * @param w - width image
+ * @param h - height image
+ * @param c - number of channels
+ * @return - image object
+ */
 image load_image(char *filename, int w, int h, int c)
 {
     image out = load_image_stb(filename, c);

@@ -492,6 +492,11 @@ matrix load_tags_paths(char **paths, int n, int k)
     return y;
 }
 
+/**
+ * Getting labels from a file
+ * @param filename - file with labels
+ * @return - array of labels
+ */
 char **get_labels(char *filename)
 {
     list *plist = get_paths(filename);

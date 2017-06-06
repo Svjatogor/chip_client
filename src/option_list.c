@@ -4,6 +4,11 @@
 #include "option_list.h"
 #include "utils.h"
 
+/**
+ * Generate a worksheet with data options for the sample
+ * @param filename - label file
+ * @return - list with options
+ */
 list *read_data_cfg(char *filename)
 {
     FILE *file = fopen(filename, "r");
@@ -32,6 +37,12 @@ list *read_data_cfg(char *filename)
     return options;
 }
 
+/**
+ * Parsing option
+ * @param s - string with option
+ * @param options - list with options
+ * @return - 1 - correct parsing, 0 - incorrect parsing
+ */
 int read_option(char *s, list *options)
 {
     size_t i;
@@ -84,6 +95,13 @@ char *option_find(list *l, char *key)
     }
     return 0;
 }
+/**
+ * Search option
+ * @param l - list with options
+ * @param key - option name
+ * @param def - file with options
+ * @return - string with an option
+ */
 char *option_find_str(list *l, char *key, char *def)
 {
     char *v = option_find(l, key);
